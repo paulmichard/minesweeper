@@ -11,6 +11,7 @@ import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 import com.paulmichard.minesweeper.dao.GameBoardDAO;
+import com.paulmichard.minesweeper.exception.GameNotFoundException;
 import com.paulmichard.minesweeper.exception.MineExplodedException;
 import com.paulmichard.minesweeper.model.GameBoardStatus;
 
@@ -39,7 +40,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public GameBoardBean showCell(Long id, Long cellId) {
-		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		GameBoardBean game = findActiveGameBoard(id);
 		game.setStatus(GameBoardStatus.IN_PROGRESS);
 
 		try {
@@ -54,7 +55,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public GameBoardBean flagCellInGame(Long id, Long cellId) {
-		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		GameBoardBean game = findActiveGameBoard(id);
 		game.setStatus(GameBoardStatus.IN_PROGRESS);
 
 		cellService.flagCell(game, cellId);
@@ -64,12 +65,20 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public GameBoardBean markCellInGame(Long id, Long cellId) {
-		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		GameBoardBean game = findActiveGameBoard(id);
 		game.setStatus(GameBoardStatus.IN_PROGRESS);
 
 		cellService.markCell(game, cellId);
 
 		return gameBoardDAO.saveBoard(game);
+	}
+
+	private GameBoardBean findActiveGameBoard(Long id) {
+		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		if (GameBoardStatus.NEW.equals(game.getStatus()) || GameBoardStatus.IN_PROGRESS.equals(game.getStatus())) {
+			return game;
+		}
+		throw new GameNotFoundException(String.format("Game with id=%s not found or is not active to play", id));
 	}
 
 	private GameBoardBean buildGameBoard(GameRequest gameRequest, List<GameCellBean> cells) {

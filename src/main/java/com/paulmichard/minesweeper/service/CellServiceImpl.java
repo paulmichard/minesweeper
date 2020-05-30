@@ -92,8 +92,9 @@ public class CellServiceImpl implements CellService {
 		if (adjacentMines == 0) {
 			// If there aren't any mines, then we should reveal all the cells
 			adjacentCells.forEach(gameCellBean -> checkAdjacentCells(game, gameCellBean));
+		} else {
+			cell.setAdjacentMines(adjacentMines);
 		}
-		cell.setAdjacentMines(adjacentMines);
 	}
 
 	/**
