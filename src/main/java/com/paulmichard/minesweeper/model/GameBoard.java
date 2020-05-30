@@ -30,7 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Builder
 @Data
 @Entity
-@Table(name = "game_board")
+@Table(name = "game_boards")
 public class GameBoard extends TimestampedEntity{
 
 	@Id
@@ -38,13 +38,13 @@ public class GameBoard extends TimestampedEntity{
 	@GenericGenerator(name = "native", strategy = "native")
 	private Long id;
 
-	@Column(name = "rows", nullable = false)
+	@Column(name = "rows_amount", nullable = false)
 	private Long rows;
 
-	@Column(name = "columns", nullable = false)
+	@Column(name = "columns_amount", nullable = false)
 	private Long columns;
 
-	@Column(name = "mines", nullable = false)
+	@Column(name = "mines_amount", nullable = false)
 	private Long mines;
 
 	@Column(name = "game_status", nullable = false,length = 15)
@@ -52,6 +52,6 @@ public class GameBoard extends TimestampedEntity{
 	private GameBoardStatus status;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "game_id")
+	@JoinColumn(name = "game_board_id")
 	private List<GameCell> cells;
 }
