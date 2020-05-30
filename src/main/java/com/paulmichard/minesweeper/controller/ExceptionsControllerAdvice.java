@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.paulmichard.minesweeper.exception.GameNotFoundException;
+
 @ControllerAdvice
 public class ExceptionsControllerAdvice {
 
@@ -13,5 +15,11 @@ public class ExceptionsControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException iae) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(iae.getMessage());
+	}
+
+	@ExceptionHandler(GameNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleGameNotFoundException(GameNotFoundException gnfe) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(gnfe.getMessage());
 	}
 }

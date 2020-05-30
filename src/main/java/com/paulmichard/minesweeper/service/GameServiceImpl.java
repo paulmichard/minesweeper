@@ -31,6 +31,11 @@ public class GameServiceImpl implements GameService {
 		return newGameBoard;
 	}
 
+	@Override
+	public GameBoardBean loadGame(Long id) {
+		return gameBoardDAO.fetchBoard(id);
+	}
+
 	private GameBoardBean buildGameBoard(GameRequest gameRequest, List<GameCellBean> cells) {
 		return GameBoardBean.builder()
 				.mines(gameRequest.getMines())

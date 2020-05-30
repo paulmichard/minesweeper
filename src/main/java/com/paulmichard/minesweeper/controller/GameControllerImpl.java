@@ -23,4 +23,9 @@ public class GameControllerImpl implements GameController {
 	public ResponseEntity<GameBoardBean> createNewGame(@Valid GameRequest gameRequest) {
 		return ResponseEntity.ok(gameService.createGame(gameRequest));
 	}
+
+	@Override
+	public ResponseEntity<GameBoardBean> loadGame(Long id) {
+		return ResponseEntity.ok(gameService.loadGame(id));
+	}
 }
