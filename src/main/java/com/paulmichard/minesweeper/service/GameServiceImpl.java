@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
-import com.paulmichard.minesweeper.model.GameBoard;
+import com.paulmichard.minesweeper.dao.GameBoardDAO;
 import com.paulmichard.minesweeper.model.GameBoardStatus;
-import com.paulmichard.minesweeper.repository.GameBoardRepository;
-import ma.glasnost.orika.MapperFacade;
 
 @Service
 @RequiredArgsConstructor
@@ -21,18 +19,15 @@ import ma.glasnost.orika.MapperFacade;
 public class GameServiceImpl implements GameService {
 
 	private final CellService cellService;
-	private final GameBoardRepository gameBoardRepository;
-	private final MapperFacade mapper;
+	private final GameBoardDAO gameBoardDAO;
 
 	@Override
 	public GameBoardBean createGame(GameRequest gameRequest) {
 		log.info("Starting to create a new Board");
 		List<GameCellBean> cells = cellService.createBoardCells(gameRequest);
 
-		GameBoardBean newGameBoard = buildGameBoard(gameRequest, cells);
-		gameBoardRepository.save(mapper.map(newGameBoard, GameBoard.class));
-
-		log.info("Board created successfully");
+		GameBoardBean newGameBoard = gameBoardDAO.saveBoard(buildGameBoard(gameRequest, cells));
+		log.info("Board created successfully with id={}", newGameBoard.getId());
 		return newGameBoard;
 	}
 
