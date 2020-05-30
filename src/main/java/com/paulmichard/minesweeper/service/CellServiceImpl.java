@@ -12,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
+import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
+import com.paulmichard.minesweeper.exception.CellNotFoundException;
+import com.paulmichard.minesweeper.model.GameCellStatus;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,16 @@ public class CellServiceImpl implements CellService {
 
 		placeRandomMines(gameRequest.getMines(), gameCellBeanList);
 		return gameCellBeanList;
+	}
+
+	@Override
+	public void flagCell(GameBoardBean game, Long cellId) {
+		updateCellStatus(game, cellId, GameCellStatus.FLAGGED);
+	}
+
+	@Override
+	public void markCell(GameBoardBean game, Long cellId) {
+		updateCellStatus(game, cellId, GameCellStatus.MARKED);
 	}
 
 	/**
@@ -106,5 +119,20 @@ public class CellServiceImpl implements CellService {
 				.hasMine(false)
 				.status(HIDDEN)
 				.build();
+	}
+
+	/**
+	 * Updates the status of a given cell in a board
+	 *
+	 * @param game
+	 * @param cellId
+	 * @param status
+	 */
+	private void updateCellStatus(GameBoardBean game, Long cellId, GameCellStatus status) {
+		game.getCells().stream()
+				.filter(gameCellBean -> gameCellBean.getId().equals(cellId))
+				.findFirst()
+				.orElseThrow(() -> new CellNotFoundException(String.format("No cell with id=%s found in game=%s", cellId, game.getId())))
+				.setStatus(status);
 	}
 }

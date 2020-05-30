@@ -36,6 +36,24 @@ public class GameServiceImpl implements GameService {
 		return gameBoardDAO.fetchBoard(id);
 	}
 
+	@Override
+	public GameBoardBean flagCellInGame(Long id, Long cellId) {
+		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+
+		cellService.flagCell(game, cellId);
+
+		return gameBoardDAO.saveBoard(game);
+	}
+
+	@Override
+	public GameBoardBean markCellInGame(Long id, Long cellId) {
+		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+
+		cellService.markCell(game, cellId);
+
+		return gameBoardDAO.saveBoard(game);
+	}
+
 	private GameBoardBean buildGameBoard(GameRequest gameRequest, List<GameCellBean> cells) {
 		return GameBoardBean.builder()
 				.mines(gameRequest.getMines())

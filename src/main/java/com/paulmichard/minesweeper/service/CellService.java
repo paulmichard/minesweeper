@@ -2,6 +2,7 @@ package com.paulmichard.minesweeper.service;
 
 import java.util.List;
 
+import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 
@@ -15,4 +16,20 @@ public interface CellService {
 	 * @return
 	 */
 	List<GameCellBean> createBoardCells(GameRequest gameRequest);
+
+	/**
+	 * Flags the cell
+	 *
+	 * @param game
+	 * @param cellId
+	 */
+	void flagCell(GameBoardBean game, Long cellId);
+
+	/**
+	 * Marks the cell
+	 *
+	 * @param game
+	 * @param cellId
+	 */
+	void markCell(GameBoardBean game, Long cellId);
 }

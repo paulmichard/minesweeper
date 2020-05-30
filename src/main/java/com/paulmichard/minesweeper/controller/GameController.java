@@ -21,4 +21,10 @@ public interface GameController {
 
 	@GetMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<GameBoardBean> loadGame(@PathVariable Long id);
+
+	@PostMapping(path = "/{id}/cells/{cellId}/flag", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<GameBoardBean> flagCell(@PathVariable Long id, @PathVariable Long cellId);
+
+	@PostMapping(path = "/{id}/cells/{cellId}/questionMark", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<GameBoardBean> questionMarkCell(@PathVariable Long id, @PathVariable Long cellId);
 }

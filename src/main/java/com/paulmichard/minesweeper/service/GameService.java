@@ -20,4 +20,22 @@ public interface GameService {
 	 * @return
 	 */
 	GameBoardBean loadGame(Long id);
+
+	/**
+	 * Adds a flag to the given cell and board
+	 *
+	 * @param id
+	 * @param cellId
+	 * @return
+	 */
+	GameBoardBean flagCellInGame(Long id, Long cellId);
+
+	/**
+	 * Adds a question mark to the given cell and board
+	 *
+	 * @param id
+	 * @param cellId
+	 * @return
+	 */
+	GameBoardBean markCellInGame(Long id, Long cellId);
 }

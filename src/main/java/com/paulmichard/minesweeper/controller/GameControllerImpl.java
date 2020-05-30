@@ -28,4 +28,16 @@ public class GameControllerImpl implements GameController {
 	public ResponseEntity<GameBoardBean> loadGame(Long id) {
 		return ResponseEntity.ok(gameService.loadGame(id));
 	}
+
+	@Override
+	public ResponseEntity<GameBoardBean> flagCell(Long id, Long cellId) {
+		return ResponseEntity.ok(gameService.flagCellInGame(id, cellId));
+	}
+
+	@Override
+	public ResponseEntity<GameBoardBean> questionMarkCell(Long id, Long cellId) {
+		return ResponseEntity.ok(gameService.markCellInGame(id, cellId));
+	}
+
+
 }
