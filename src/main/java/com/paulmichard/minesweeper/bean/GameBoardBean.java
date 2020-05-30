@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.paulmichard.minesweeper.model.GameBoardStatus;
-import com.paulmichard.minesweeper.model.GameCell;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,5 +19,5 @@ public class GameBoardBean {
 	private Long columns;
 	private Long mines;
 	private GameBoardStatus status;
-	private List<GameCell> cells;
+	private List<GameCellBean> cells;
 }
