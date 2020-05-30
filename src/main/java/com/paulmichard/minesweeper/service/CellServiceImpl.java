@@ -1,10 +1,12 @@
 package com.paulmichard.minesweeper.service;
 
 import static com.paulmichard.minesweeper.model.GameCellStatus.HIDDEN;
+import static com.paulmichard.minesweeper.model.GameCellStatus.VISIBLE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 import com.paulmichard.minesweeper.exception.CellNotFoundException;
+import com.paulmichard.minesweeper.exception.MineExplodedException;
 import com.paulmichard.minesweeper.model.GameCellStatus;
 
 @Service
@@ -42,6 +45,74 @@ public class CellServiceImpl implements CellService {
 	@Override
 	public void markCell(GameBoardBean game, Long cellId) {
 		updateCellStatus(game, cellId, GameCellStatus.MARKED);
+	}
+
+	@Override
+	public void revealCell(GameBoardBean game, Long cellId) {
+		GameCellBean cellToReveal = game.getCells().stream()
+				.filter(gameCellBean -> gameCellBean.getId().equals(cellId))
+				.findFirst()
+				.orElseThrow(() -> new CellNotFoundException(String.format("No cell with id=%s found in game=%s", cellId, game.getId())));
+
+		cellToReveal.setStatus(GameCellStatus.VISIBLE);
+
+		checkForMine(game, cellToReveal);
+	}
+
+	/**
+	 * Checks if the selected cell as a mine and, if not, tries to reveal the surrounding cells
+	 *
+	 * @param game
+	 * @param cell
+	 */
+	private void checkForMine(GameBoardBean game, GameCellBean cell) {
+		if (cell.isHasMine()) {
+			throw new MineExplodedException(String.format("Mine has exploded in cell located at row=%s and column=%s!!", cell.getRowPosition(), cell.getColumnPosition()));
+		}
+		checkAdjacentCells(game, cell);
+	}
+
+	/**
+	 * Checks the surroundings for mines or to reveal all the cells
+	 *
+	 * @param game
+	 * @param cell
+	 */
+	private void checkAdjacentCells(GameBoardBean game, GameCellBean cell) {
+		//When a cell with no adjacent mines is revealed, all adjacent squares will be revealed (and repeat)
+		cell.setStatus(VISIBLE);
+		// First, search all the cells that are still playable
+		List<GameCellBean> adjacentCells = getAdjacentPlayableCells(game, cell);
+
+		// Next, check how mine mines are next to the first cell
+		long adjacentMines = adjacentCells.stream()
+				.filter(GameCellBean::isHasMine)
+				.count();
+
+		if (adjacentMines == 0) {
+			// If there aren't any mines, then we should reveal all the cells
+			adjacentCells.forEach(gameCellBean -> checkAdjacentCells(game, gameCellBean));
+		}
+		cell.setAdjacentMines(adjacentMines);
+	}
+
+	/**
+	 * Returns a list of all the cells that are still possible to play
+	 *
+	 * @param game
+	 * @param cell
+	 * @return
+	 */
+	private List<GameCellBean> getAdjacentPlayableCells(GameBoardBean game, GameCellBean cell) {
+		return game.getCells().stream()
+				.filter(gameCellBean -> gameCellBean.getRowPosition().equals(cell.getRowPosition())
+						|| gameCellBean.getRowPosition().equals(cell.getRowPosition() + 1)
+						|| gameCellBean.getRowPosition().equals(cell.getRowPosition() - 1))
+				.filter(gameCellBean -> gameCellBean.getColumnPosition().equals(cell.getColumnPosition())
+						|| gameCellBean.getColumnPosition().equals(cell.getColumnPosition() + 1)
+						|| gameCellBean.getColumnPosition().equals(cell.getColumnPosition() - 1))
+				.filter(gameCellBean -> !VISIBLE.equals(gameCellBean.getStatus()))
+				.collect(Collectors.toList());
 	}
 
 	/**

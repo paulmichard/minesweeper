@@ -17,4 +17,5 @@ public class GameCellBean {
 	private Long columnPosition;
 	private boolean hasMine;
 	private GameCellStatus status;
+	private Long adjacentMines;
 }

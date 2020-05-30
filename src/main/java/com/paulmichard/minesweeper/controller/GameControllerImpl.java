@@ -39,5 +39,8 @@ public class GameControllerImpl implements GameController {
 		return ResponseEntity.ok(gameService.markCellInGame(id, cellId));
 	}
 
-
+	@Override
+	public ResponseEntity<GameBoardBean> showCell(Long id, Long cellId) {
+		return ResponseEntity.ok(gameService.showCell(id, cellId));
+	}
 }

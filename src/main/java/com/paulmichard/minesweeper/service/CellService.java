@@ -32,4 +32,12 @@ public interface CellService {
 	 * @param cellId
 	 */
 	void markCell(GameBoardBean game, Long cellId);
+
+	/**
+	 * Reveals the selected cell
+	 *
+	 * @param game
+	 * @param cellId
+	 */
+	void revealCell(GameBoardBean game, Long cellId);
 }

@@ -11,6 +11,7 @@ import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 import com.paulmichard.minesweeper.dao.GameBoardDAO;
+import com.paulmichard.minesweeper.exception.MineExplodedException;
 import com.paulmichard.minesweeper.model.GameBoardStatus;
 
 @Service
@@ -37,8 +38,24 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
+	public GameBoardBean showCell(Long id, Long cellId) {
+		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		game.setStatus(GameBoardStatus.IN_PROGRESS);
+
+		try {
+			cellService.revealCell(game, cellId);
+		} catch (MineExplodedException mee) {
+			log.info("Game with id={} as finished as a mine has exploded", game.getId());
+			game.setStatus(GameBoardStatus.LOST);
+		}
+
+		return gameBoardDAO.saveBoard(game);
+	}
+
+	@Override
 	public GameBoardBean flagCellInGame(Long id, Long cellId) {
 		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		game.setStatus(GameBoardStatus.IN_PROGRESS);
 
 		cellService.flagCell(game, cellId);
 
@@ -48,6 +65,7 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public GameBoardBean markCellInGame(Long id, Long cellId) {
 		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		game.setStatus(GameBoardStatus.IN_PROGRESS);
 
 		cellService.markCell(game, cellId);
 

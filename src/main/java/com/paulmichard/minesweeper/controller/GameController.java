@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 
-@RequestMapping(value = "minesweeper/api/v1/games")
+@RequestMapping(value = "/minesweeper/api/v1/games")
 public interface GameController {
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,4 +27,7 @@ public interface GameController {
 
 	@PostMapping(path = "/{id}/cells/{cellId}/questionMark", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<GameBoardBean> questionMarkCell(@PathVariable Long id, @PathVariable Long cellId);
+
+	@PostMapping(path = "/{id}/cells/{cellId}/show", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<GameBoardBean> showCell(@PathVariable Long id, @PathVariable Long cellId);
 }

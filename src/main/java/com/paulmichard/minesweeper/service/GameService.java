@@ -22,6 +22,15 @@ public interface GameService {
 	GameBoardBean loadGame(Long id);
 
 	/**
+	 * Makes a cell visible
+	 *
+	 * @param id
+	 * @param cellId
+	 * @return
+	 */
+	GameBoardBean showCell(Long id, Long cellId);
+
+	/**
 	 * Adds a flag to the given cell and board
 	 *
 	 * @param id

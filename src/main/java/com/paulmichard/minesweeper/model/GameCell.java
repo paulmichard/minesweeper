@@ -44,4 +44,7 @@ public class GameCell extends TimestampedEntity {
 	@Enumerated(STRING)
 	@Column(name = "cell_status", nullable = false, length = 15)
 	private GameCellStatus status;
+
+	@Column(name = "adjacent_mines")
+	private Long adjacentMines;
 }
