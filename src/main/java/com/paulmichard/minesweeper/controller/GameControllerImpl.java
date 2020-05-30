@@ -30,6 +30,16 @@ public class GameControllerImpl implements GameController {
 	}
 
 	@Override
+	public ResponseEntity<GameBoardBean> pauseGame(Long id) {
+		return ResponseEntity.ok(gameService.pauseGame(id));
+	}
+
+	@Override
+	public ResponseEntity<GameBoardBean> resumeGame(Long id) {
+		return ResponseEntity.ok(gameService.resumeGame(id));
+	}
+
+	@Override
 	public ResponseEntity<GameBoardBean> flagCell(Long id, Long cellId) {
 		return ResponseEntity.ok(gameService.flagCellInGame(id, cellId));
 	}

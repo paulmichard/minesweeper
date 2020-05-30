@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.paulmichard.minesweeper.exception.CellNotFoundException;
+import com.paulmichard.minesweeper.exception.GameAlreadyCompletedException;
 import com.paulmichard.minesweeper.exception.GameNotFoundException;
 
 @ControllerAdvice
@@ -28,5 +29,11 @@ public class ExceptionsControllerAdvice {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<Object> handleCellNotFoundException(CellNotFoundException cnfe) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(cnfe.getMessage());
+	}
+
+	@ExceptionHandler(GameAlreadyCompletedException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ResponseEntity<Object> handleGameAlreadyCompletedException(GameAlreadyCompletedException gace) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(gace.getMessage());
 	}
 }

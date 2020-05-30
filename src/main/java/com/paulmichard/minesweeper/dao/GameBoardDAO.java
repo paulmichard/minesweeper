@@ -5,5 +5,5 @@ import com.paulmichard.minesweeper.bean.GameBoardBean;
 public interface GameBoardDAO {
 	GameBoardBean saveBoard(GameBoardBean gameBoardBean);
 
-	GameBoardBean fetchBoard(Long id);
+	GameBoardBean fetchBoardById(Long id);
 }

@@ -11,6 +11,7 @@ import com.paulmichard.minesweeper.bean.GameBoardBean;
 import com.paulmichard.minesweeper.bean.GameCellBean;
 import com.paulmichard.minesweeper.bean.GameRequest;
 import com.paulmichard.minesweeper.dao.GameBoardDAO;
+import com.paulmichard.minesweeper.exception.GameAlreadyCompletedException;
 import com.paulmichard.minesweeper.exception.GameNotFoundException;
 import com.paulmichard.minesweeper.exception.MineExplodedException;
 import com.paulmichard.minesweeper.model.GameBoardStatus;
@@ -35,7 +36,7 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public GameBoardBean loadGame(Long id) {
-		return gameBoardDAO.fetchBoard(id);
+		return gameBoardDAO.fetchBoardById(id);
 	}
 
 	@Override
@@ -73,8 +74,27 @@ public class GameServiceImpl implements GameService {
 		return gameBoardDAO.saveBoard(game);
 	}
 
+	@Override
+	public GameBoardBean pauseGame(Long id) {
+		return updateGameStatus(id, GameBoardStatus.PAUSED);
+	}
+
+	@Override
+	public GameBoardBean resumeGame(Long id) {
+		return updateGameStatus(id, GameBoardStatus.IN_PROGRESS);
+	}
+
+	private GameBoardBean updateGameStatus(Long id, GameBoardStatus status) {
+		GameBoardBean game = gameBoardDAO.fetchBoardById(id);
+		if (GameBoardStatus.LOST.equals(game.getStatus())) {
+			throw new GameAlreadyCompletedException(String.format("Game with id=%s is already finished, the status cannot be changed to %s", id, status.name()));
+		}
+		game.setStatus(status);
+		return gameBoardDAO.saveBoard(game);
+	}
+
 	private GameBoardBean findActiveGameBoard(Long id) {
-		GameBoardBean game = gameBoardDAO.fetchBoard(id);
+		GameBoardBean game = gameBoardDAO.fetchBoardById(id);
 		if (GameBoardStatus.NEW.equals(game.getStatus()) || GameBoardStatus.IN_PROGRESS.equals(game.getStatus())) {
 			return game;
 		}

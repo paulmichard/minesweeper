@@ -47,4 +47,20 @@ public interface GameService {
 	 * @return
 	 */
 	GameBoardBean markCellInGame(Long id, Long cellId);
+
+	/**
+	 * Pauses an active game
+	 *
+	 * @param id
+	 * @return
+	 */
+	GameBoardBean pauseGame(Long id);
+
+	/**
+	 * Resumes an active game
+	 *
+	 * @param id
+	 * @return
+	 */
+	GameBoardBean resumeGame(Long id);
 }

@@ -22,7 +22,7 @@ public class GameBoardDAOImpl implements GameBoardDAO {
 	}
 
 	@Override
-	public GameBoardBean fetchBoard(Long id) {
+	public GameBoardBean fetchBoardById(Long id) {
 		return gameBoardRepository.findById(id)
 				.map(gameBoard -> mapper.map(gameBoard, GameBoardBean.class))
 				.orElseThrow(() -> new GameNotFoundException(String.format("Game with id=%s not found", id)));
