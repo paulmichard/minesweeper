@@ -1,5 +1,13 @@
 package com.paulmichard.minesweeper.service;
 
+import static com.paulmichard.minesweeper.model.GameBoardStatus.IN_PROGRESS;
+import static com.paulmichard.minesweeper.model.GameBoardStatus.LOST;
+import static com.paulmichard.minesweeper.model.GameBoardStatus.NEW;
+import static com.paulmichard.minesweeper.model.GameBoardStatus.PAUSED;
+import static com.paulmichard.minesweeper.model.GameBoardStatus.WON;
+import static com.paulmichard.minesweeper.model.GameCellStatus.FLAGGED;
+import static com.paulmichard.minesweeper.model.GameCellStatus.HIDDEN;
+
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -42,13 +50,15 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public GameBoardBean showCell(Long id, Long cellId) {
 		GameBoardBean game = findActiveGameBoard(id);
-		game.setStatus(GameBoardStatus.IN_PROGRESS);
+		game.setStatus(IN_PROGRESS);
 
 		try {
 			cellService.revealCell(game, cellId);
+
+			checkGame(game);
 		} catch (MineExplodedException mee) {
 			log.info("Game with id={} as finished as a mine has exploded", game.getId());
-			game.setStatus(GameBoardStatus.LOST);
+			game.setStatus(LOST);
 		}
 
 		return gameBoardDAO.saveBoard(game);
@@ -57,9 +67,10 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public GameBoardBean flagCellInGame(Long id, Long cellId) {
 		GameBoardBean game = findActiveGameBoard(id);
-		game.setStatus(GameBoardStatus.IN_PROGRESS);
+		game.setStatus(IN_PROGRESS);
 
 		cellService.flagCell(game, cellId);
+		checkGame(game);
 
 		return gameBoardDAO.saveBoard(game);
 	}
@@ -67,7 +78,7 @@ public class GameServiceImpl implements GameService {
 	@Override
 	public GameBoardBean markCellInGame(Long id, Long cellId) {
 		GameBoardBean game = findActiveGameBoard(id);
-		game.setStatus(GameBoardStatus.IN_PROGRESS);
+		game.setStatus(IN_PROGRESS);
 
 		cellService.markCell(game, cellId);
 
@@ -76,17 +87,28 @@ public class GameServiceImpl implements GameService {
 
 	@Override
 	public GameBoardBean pauseGame(Long id) {
-		return updateGameStatus(id, GameBoardStatus.PAUSED);
+		return updateGameStatus(id, PAUSED);
 	}
 
 	@Override
 	public GameBoardBean resumeGame(Long id) {
-		return updateGameStatus(id, GameBoardStatus.IN_PROGRESS);
+		return updateGameStatus(id, IN_PROGRESS);
+	}
+
+	private void checkGame(GameBoardBean game) {
+		// The game is won when all remaining cells are mines, and are either hidden or marked
+		if (game.getCells().stream()
+				.filter(gameCellBean -> HIDDEN.equals(gameCellBean.getStatus())
+						|| FLAGGED.equals(gameCellBean.getStatus()))
+				.allMatch(GameCellBean::isHasMine)) {
+			game.setStatus(WON);
+			return;
+		}
 	}
 
 	private GameBoardBean updateGameStatus(Long id, GameBoardStatus status) {
 		GameBoardBean game = gameBoardDAO.fetchBoardById(id);
-		if (GameBoardStatus.LOST.equals(game.getStatus())) {
+		if (LOST.equals(game.getStatus()) || WON.equals(game.getStatus())) {
 			throw new GameAlreadyCompletedException(String.format("Game with id=%s is already finished, the status cannot be changed to %s", id, status.name()));
 		}
 		game.setStatus(status);
@@ -95,7 +117,7 @@ public class GameServiceImpl implements GameService {
 
 	private GameBoardBean findActiveGameBoard(Long id) {
 		GameBoardBean game = gameBoardDAO.fetchBoardById(id);
-		if (GameBoardStatus.NEW.equals(game.getStatus()) || GameBoardStatus.IN_PROGRESS.equals(game.getStatus())) {
+		if (NEW.equals(game.getStatus()) || IN_PROGRESS.equals(game.getStatus())) {
 			return game;
 		}
 		throw new GameNotFoundException(String.format("Game with id=%s not found or is not active to play", id));
@@ -106,7 +128,7 @@ public class GameServiceImpl implements GameService {
 				.mines(gameRequest.getMines())
 				.columns(gameRequest.getColumns())
 				.rows(gameRequest.getRows())
-				.status(GameBoardStatus.NEW)
+				.status(NEW)
 				.cells(cells)
 				.build();
 	}
