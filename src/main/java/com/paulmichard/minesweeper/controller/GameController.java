@@ -32,7 +32,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> createNewGame(@Valid @RequestBody GameRequest gameRequest);
 
-	@GetMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "GET",
 			value = "Loads an existing game")
@@ -42,7 +42,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> loadGame(@PathVariable Long id);
 
-	@PatchMapping(path = "/{id}/pause", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(path = "/{id}/pause", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "PATCH",
 			value = "Pauses a game that is still active")
@@ -53,7 +53,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> pauseGame(@PathVariable Long id);
 
-	@PatchMapping(path = "/{id}/resume", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(path = "/{id}/resume", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "PATCH",
 			value = "Resumes a game that is still active")
@@ -64,7 +64,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> resumeGame(@PathVariable Long id);
 
-	@PostMapping(path = "/{id}/cells/{cellId}/flag", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/{id}/cells/{cellId}/flag", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "POST",
 			value = "Flags a cell")
@@ -74,7 +74,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> flagCell(@PathVariable Long id, @PathVariable Long cellId);
 
-	@PostMapping(path = "/{id}/cells/{cellId}/questionMark", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/{id}/cells/{cellId}/questionMark", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "POST",
 			value = "Adds a question mark to a cell")
@@ -84,7 +84,7 @@ public interface GameController {
 			@ApiResponse(code = 500, message = "Unknown error")})
 	ResponseEntity<GameBoardBean> questionMarkCell(@PathVariable Long id, @PathVariable Long cellId);
 
-	@PostMapping(path = "/{id}/cells/{cellId}/show", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path = "/{id}/cells/{cellId}/show", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiOperation(
 			httpMethod = "POST",
 			value = "Reveals the cell")
