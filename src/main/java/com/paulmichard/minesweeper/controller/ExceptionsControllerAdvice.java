@@ -19,6 +19,12 @@ public class ExceptionsControllerAdvice {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(iae.getMessage());
 	}
 
+	@ExceptionHandler(NullPointerException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleNullPointerException(NullPointerException npe) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(npe.getMessage());
+	}
+
 	@ExceptionHandler(GameNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<Object> handleGameNotFoundException(GameNotFoundException gnfe) {
