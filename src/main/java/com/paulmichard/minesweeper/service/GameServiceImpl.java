@@ -102,7 +102,6 @@ public class GameServiceImpl implements GameService {
 						|| FLAGGED.equals(gameCellBean.getStatus()))
 				.allMatch(GameCellBean::isHasMine)) {
 			game.setStatus(WON);
-			return;
 		}
 	}
 
