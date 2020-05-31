@@ -1,8 +1,8 @@
 create TABLE `game_boards`
 (
     `id`                BIGINT NOT NULL AUTO_INCREMENT,
-    `created_on`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `last_modified`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_on`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `last_modified`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `rows_amount`       BIGINT NOT NULL,
     `columns_amount`    BIGINT NOT NULL,
     `mines_amount`      BIGINT NOT NULL,
@@ -14,8 +14,8 @@ create TABLE `game_boards`
 create TABLE `game_cells`
 (
     `id`                BIGINT NOT NULL AUTO_INCREMENT,
-    `created_on`        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `last_modified`     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_on`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `last_modified`     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `row_position`      BIGINT NOT NULL,
     `column_position`   BIGINT NOT NULL,
     `has_mine`          BIT(1) NOT NULL DEFAULT 0,
