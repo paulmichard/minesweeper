@@ -1,0 +1,247 @@
+{
+	"info": {
+		"_postman_id": "70a4ffef-c4a7-42bf-9bdd-7239b521fca2",
+		"name": "MineSweeper",
+		"description": "Minesweeper APIs Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cell",
+			"item": [
+				{
+					"name": "Flag Cell",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}/cells/{{cellId}}/flag",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}",
+								"cells",
+								"{{cellId}}",
+								"flag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Cell",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}/cells/{{cellId}}/questionMark",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}",
+								"cells",
+								"{{cellId}}",
+								"questionMark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Cell",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}/cells/{{cellId}}/show",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}",
+								"cells",
+								"{{cellId}}",
+								"show"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Game",
+			"item": [
+				{
+					"name": "New Game",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"rows\":\"\",\n\t\"columns\":\"2\",\n\t\"mines\":\"1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Load Game",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pause Game",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}/pause",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}",
+								"pause"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resume Game",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/minesweeper/api/v1/games/{{id}}/resume",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"minesweeper",
+								"api",
+								"v1",
+								"games",
+								"{{id}}",
+								"resume"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

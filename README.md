@@ -30,6 +30,9 @@ The layers included are as follow:
 * **DAO:** Specific layer for abstraction, that handles the mapping between Entities and Beans, removing that responsibility from the service, and communicates with the Repositories.
 * **Repository:** Handles communication between DAOs and the DB.
 
+## Postman
+A [Postman collection](MineSweeper.postman_collection.json) has been included as part of the project, with some sample request to test the existing APIs.
+
 ## Swagger
 The project includes Swagger and SwaggerUI plugin, to navigate through the available APIs, review their specifications, and performan some basic calls. This can be achieved by accessing `/swagger-ui.html` in the application base path, for example:<br>
 `http://localhost:8080/swagger-ui.html`
